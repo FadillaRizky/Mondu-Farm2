@@ -21,7 +21,12 @@ class DetailTernak extends StatefulWidget {
   final String kategori;
 
   const DetailTernak(
-      {Key? key, required this.url1, required this.kategori, required this.uid, required this.url2, required this.url3})
+      {Key? key,
+      required this.url1,
+      required this.kategori,
+      required this.uid,
+      required this.url2,
+      required this.url3})
       : super(key: key);
 
   @override
@@ -62,12 +67,7 @@ class _DetailTernakState extends State<DetailTernak> {
 
   Future<void> getUserFromFirebase() async {
     try {
-      FirebaseDatabase.instance
-          .ref()
-          .child("users")
-          .child(id_user)
-          .onValue
-          .listen((event) {
+      FirebaseDatabase.instance.ref().child("users").child(id_user).onValue.listen((event) {
         var snapshot = event.snapshot.value as Map;
         nama = snapshot['nama'];
         no_telepon = snapshot['no_telepon'];
@@ -88,20 +88,23 @@ class _DetailTernakState extends State<DetailTernak> {
   // String? url2;
   // String? url3;
 
-  List listUrl = [];
-
-  getImageUrl() async {
-     FirebaseStorage storage = await FirebaseStorage.instance;
-    Reference ref1 = storage.ref().child("ternak").child(widget.kategori.toLowerCase()).child(widget.url1);
-    Reference ref2 = storage.ref().child("ternak").child(widget.kategori.toLowerCase()).child(widget.url2);
-    Reference ref3 = storage.ref().child("ternak").child(widget.kategori.toLowerCase()).child(widget.url3);
-    var url1 = ref1.getDownloadURL();
-    var url2 = ref2.getDownloadURL();
-    var url3 = ref3.getDownloadURL();
+  Future<List<String>> getImageUrl() async {
+    FirebaseStorage storage = FirebaseStorage.instance;
+    Reference ref1 =
+        storage.ref().child("ternak").child(widget.kategori.toLowerCase()).child(widget.url1);
+    Reference ref2 =
+        storage.ref().child("ternak").child(widget.kategori.toLowerCase()).child(widget.url2);
+    Reference ref3 =
+        storage.ref().child("ternak").child(widget.kategori.toLowerCase()).child(widget.url3);
+    var url1 = await ref1.getDownloadURL();
+    var url2 = await ref2.getDownloadURL();
+    var url3 = await ref3.getDownloadURL();
+    List<String> listUrl = [];
 
     listUrl.add(url1);
     listUrl.add(url2);
     listUrl.add(url3);
+    return listUrl;
   }
 
   final List<String> imgList = [
@@ -109,7 +112,6 @@ class _DetailTernakState extends State<DetailTernak> {
     'https://images.unsplash.com/photo-1522205408450-add114ad53fe?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=368f45b0888aeb0b7b08e3a1084d3ede&auto=format&fit=crop&w=1950&q=80',
     'https://images.unsplash.com/photo-1519125323398-675f0ddb6308?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=94a1e718d89ca60a6337a6008341ca50&auto=format&fit=crop&w=1950&q=80',
   ];
-
 
   @override
   void initState() {
@@ -160,26 +162,37 @@ class _DetailTernakState extends State<DetailTernak> {
                 //     future:,
                 //     builder: builder
                 // ),
-                CarouselSlider(
-                  options: CarouselOptions(
-                    autoPlay: true,
-                    aspectRatio: 2.0,
-                    enlargeCenterPage: true,
-                  ),
-                  items: imgList.map((item) => Container(
-                    child: Container(
-                      margin: EdgeInsets.all(5.0),
-                      child: ClipRRect(
-                          borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                          child: Stack(
-                            children: <Widget>[
-                              Image.network(item.toString(), fit: BoxFit.cover, width: 1000.0),
-                            ],
-                          )),
-                    ),
-                  ))
-                      .toList(),
-                ),
+                FutureBuilder<List<String>>(
+                    future: getImageUrl(),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        return CarouselSlider(
+                          options: CarouselOptions(
+                            autoPlay: true,
+                            aspectRatio: 2.0,
+                            enlargeCenterPage: true,
+                          ),
+                          items: snapshot.data!
+                              .map((item) => Container(
+                                    child: Container(
+                                      margin: EdgeInsets.all(5.0),
+                                      child: ClipRRect(
+                                          borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                                          child: Stack(
+                                            children: <Widget>[
+                                              Image.network(item.toString(),
+                                                  fit: BoxFit.cover, width: 1000.0),
+                                            ],
+                                          )),
+                                    ),
+                                  ))
+                              .toList(),
+                        );
+                      }
+                      return Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }),
                 SizedBox(
                   height: 15,
                 ),
@@ -191,11 +204,10 @@ class _DetailTernakState extends State<DetailTernak> {
                       .child(widget.uid)
                       .onValue,
                   builder: (context, snapshot) {
-                    if (snapshot.hasData &&
-                        (snapshot.data!).snapshot.value != null) {
+                    if (snapshot.hasData && (snapshot.data!).snapshot.value != null) {
                       Map<dynamic, dynamic> data = Map<dynamic, dynamic>.from(
                           (snapshot.data! as DatabaseEvent).snapshot.value
-                          as Map<dynamic, dynamic>);
+                              as Map<dynamic, dynamic>);
                       return Column(
                         children: [
                           // Row(
@@ -239,9 +251,9 @@ class _DetailTernakState extends State<DetailTernak> {
                             icon: "assets/money2.png",
                             value: currencyFormatter.format(
                               data['harga'],
-
                             ),
-                            height: 60,),
+                            height: 60,
+                          ),
                           SizedBox(
                             height: 20,
                           ),
@@ -252,34 +264,26 @@ class _DetailTernakState extends State<DetailTernak> {
                                   style: ButtonStyle(
                                       padding: MaterialStateProperty.all(
                                           EdgeInsets.fromLTRB(18, 10, 18, 18)),
-                                      backgroundColor:
-                                      MaterialStateProperty.all(
-                                          Warna.secondary)),
+                                      backgroundColor: MaterialStateProperty.all(Warna.secondary)),
                                   onPressed: () {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (context) =>
-                                            DetailChat(
-                                              idTernak:
-                                              snapshot.data!.snapshot.key!,
-                                              kategori: widget.kategori,
-                                              dataTernak: data,
-                                            ),
+                                        builder: (context) => DetailChat(
+                                          idTernak: snapshot.data!.snapshot.key!,
+                                          kategori: widget.kategori,
+                                          dataTernak: data,
+                                        ),
                                       ),
                                     );
                                   },
                                   icon: SizedBox(
-                                      height: 80,
-                                      child: Image.asset(
-                                          "assets/icon_chat2.png"))),
+                                      height: 80, child: Image.asset("assets/icon_chat2.png"))),
                               IconButton(
                                   style: ButtonStyle(
                                       padding: MaterialStateProperty.all(
                                           EdgeInsets.fromLTRB(18, 10, 18, 18)),
-                                      backgroundColor:
-                                      MaterialStateProperty.all(
-                                          Warna.secondary)),
+                                      backgroundColor: MaterialStateProperty.all(Warna.secondary)),
                                   onPressed: () {
                                     playVoiceover("apakah  nyum yakin?");
                                     Alerts.showAlertYesNo(
@@ -293,8 +297,8 @@ class _DetailTernakState extends State<DetailTernak> {
                                           'url_gambar': widget.url1,
                                           'kategori': widget.kategori,
                                           'tanggal_booking':
-                                          // "2024-01-14 14:22:29.368050",
-                                          DateTime.now().toString(),
+                                              // "2024-01-14 14:22:29.368050",
+                                              DateTime.now().toString(),
                                           // DateTime.now().subtract(Duration(days: 3)).toString(), // Testing
                                           'status_booking': "Sedang Di Booking",
                                         });
@@ -306,9 +310,7 @@ class _DetailTernakState extends State<DetailTernak> {
                                     );
                                   },
                                   icon: SizedBox(
-                                      height: 80,
-                                      child: Image.asset(
-                                          "assets/shopping-cart1.png"))),
+                                      height: 80, child: Image.asset("assets/shopping-cart1.png"))),
                             ],
                           )
                         ],
@@ -317,8 +319,8 @@ class _DetailTernakState extends State<DetailTernak> {
                     if (snapshot.hasData) {
                       return Center(
                           child: Text(
-                            "Ternak Tidak Tersedia",
-                          ));
+                        "Ternak Tidak Tersedia",
+                      ));
                     }
                     return const Center(
                       child: CircularProgressIndicator(),
@@ -333,10 +335,8 @@ class _DetailTernakState extends State<DetailTernak> {
     );
   }
 
-  List<Widget> imageSliders(List imgList) =>
-      imgList
-          .map((item) =>
-          Container(
+  List<Widget> imageSliders(List imgList) => imgList
+      .map((item) => Container(
             child: Container(
               margin: EdgeInsets.all(5.0),
               child: ClipRRect(
@@ -348,7 +348,7 @@ class _DetailTernakState extends State<DetailTernak> {
                   )),
             ),
           ))
-          .toList();
+      .toList();
 }
 
 class DetailInfo extends StatelessWidget {
@@ -377,10 +377,10 @@ class DetailInfo extends StatelessWidget {
                     height: 80.0,
                     padding: EdgeInsets.all(height! - 50),
                     color: Warna.secondary,
-                    child: Image.asset(icon,
+                    child: Image.asset(
+                      icon,
                       //     height: height,
                       // width:height,
-
                     ))),
             SizedBox(
               width: 10,
@@ -404,15 +404,16 @@ class DetailInfo extends StatelessWidget {
                   contentPadding: const EdgeInsets.fromLTRB(15, 30, 15, 0),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(13),
-                    borderSide:
-                    const BorderSide(width: 1, color: Color(0xFFDEDEDE)),
+                    borderSide: const BorderSide(width: 1, color: Color(0xFFDEDEDE)),
                   ),
                 ),
               ),
             )
           ],
         ),
-        SizedBox(height: 10,)
+        SizedBox(
+          height: 10,
+        )
       ],
     );
     // Container(
@@ -441,6 +442,4 @@ class DetailInfo extends StatelessWidget {
     //     ],
     //   ));
   }
-
 }
-
