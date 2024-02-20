@@ -35,8 +35,8 @@ class _HomeState extends State<Home> {
 
   final FlutterTts flutterTts = FlutterTts();
 
-  Future<String> getImageFromStorage(String pathName) {
-    FirebaseStorage storage = FirebaseStorage.instance;
+  Future<String> getImageFromStorage(String pathName) async{
+    FirebaseStorage storage = await FirebaseStorage.instance;
     Reference ref = storage.ref().child("users").child(id_user).child(pathName);
 
     return ref.getDownloadURL();
@@ -272,29 +272,57 @@ class _HomeState extends State<Home> {
 
                             });
                           },
-                          child: FutureBuilder(
-                              future: getImageFromStorage(url),
-                              builder: (context, snapshot){
-                                print(snapshot.data);
-                                if (snapshot.hasData) {
-                                  return SizedBox(
-                                    width: 40,
-                                    height: 40,
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(10000),
-                                        child: Image.network(snapshot.data!,fit: BoxFit.cover,)),
-                                  );
-                                }
-                                if (snapshot.hasError) {
-                                  return Icon(
-                                    Icons.person,
-                                    color: Colors.white,
-                                  );
-                                }
-                                return Center(
-                                  child: CircularProgressIndicator(),
+                          child: StreamBuilder(
+                            stream: FirebaseDatabase.instance
+                                .ref()
+                                .child('users')
+                                .child(id_user)
+                                .onValue,
+                            builder: (context, snapshot) {
+                              if (snapshot.hasData &&
+                                  (snapshot.data!).snapshot.value != null) {
+                                Map<dynamic, dynamic> data = Map<dynamic, dynamic>.from(
+                                    (snapshot.data! as DatabaseEvent).snapshot.value
+                                    as Map<dynamic, dynamic>);
+                                // print("cetak data : ${data["photo_url"]}");
+                                return FutureBuilder(
+                                    future: getImageFromStorage(data["photo_url"].toString()),
+                                    builder: (context, snapshot) {
+                                      if (snapshot.hasData) {
+                                        return SizedBox(
+                                          width: 40,
+                                          height: 40,
+                                          child: ClipRRect(
+                                              borderRadius:
+                                              BorderRadius.circular(10000),
+                                              child: Image.network(
+                                                snapshot.data!,
+                                                fit: BoxFit.cover,
+                                              )),
+                                        );
+                                      }
+                                      if (snapshot.hasError) {
+                                        return Icon(
+                                          Icons.person,
+                                          color: Colors.white,
+                                        );
+                                      }
+                                      return Center(
+                                        child: CircularProgressIndicator(),
+                                      );
+                                    });
+                              }
+                              if (snapshot.hasData) {
+                                return Icon(
+                                  Icons.person,
+                                  color: Colors.red,
                                 );
-                              }),
+                              }
+                              return Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            },
+                          ),
                         ),
                         SizedBox(
                           width: 10,

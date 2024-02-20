@@ -104,6 +104,12 @@ class _DetailTernakState extends State<DetailTernak> {
     listUrl.add(url3);
   }
 
+  final List<String> imgList = [
+    'https://images.unsplash.com/photo-1520342868574-5fa3804e551c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=6ff92caffcdd63681a35134a6770ed3b&auto=format&fit=crop&w=1951&q=80',
+    'https://images.unsplash.com/photo-1522205408450-add114ad53fe?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=368f45b0888aeb0b7b08e3a1084d3ede&auto=format&fit=crop&w=1950&q=80',
+    'https://images.unsplash.com/photo-1519125323398-675f0ddb6308?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=94a1e718d89ca60a6337a6008341ca50&auto=format&fit=crop&w=1950&q=80',
+  ];
+
 
   @override
   void initState() {
@@ -139,17 +145,17 @@ class _DetailTernakState extends State<DetailTernak> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                SizedBox(
-                  height: 250,
-                  width: double.infinity,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(10),
-                    child: Image.network(
-                      widget.url1,
-                      fit: BoxFit.fill,
-                    ),
-                  ),
-                ),
+                // SizedBox(
+                //   height: 250,
+                //   width: double.infinity,
+                //   child: ClipRRect(
+                //     borderRadius: BorderRadius.circular(10),
+                //     child: Image.network(
+                //       widget.url1,
+                //       fit: BoxFit.fill,
+                //     ),
+                //   ),
+                // ),
                 // FutureBuilder(
                 //     future:,
                 //     builder: builder
@@ -160,7 +166,7 @@ class _DetailTernakState extends State<DetailTernak> {
                     aspectRatio: 2.0,
                     enlargeCenterPage: true,
                   ),
-                  items: listUrl.map((item) => Container(
+                  items: imgList.map((item) => Container(
                     child: Container(
                       margin: EdgeInsets.all(5.0),
                       child: ClipRRect(
