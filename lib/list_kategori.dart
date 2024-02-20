@@ -11,6 +11,7 @@ import 'package:mondu_farm/utils/custom_extension.dart';
 
 class CategoryList extends StatefulWidget {
   final String kategori;
+
   const CategoryList({
     Key? key,
     required this.kategori,
@@ -28,7 +29,11 @@ class _CategoryListState extends State<CategoryList> {
 
   Future<String> getImageFromStorage(String pathName) {
     FirebaseStorage storage = FirebaseStorage.instance;
-    Reference ref = storage.ref().child("ternak").child(widget.kategori.toLowerCase()).child(pathName);
+    Reference ref = storage
+        .ref()
+        .child("ternak")
+        .child(widget.kategori.toLowerCase())
+        .child(pathName);
 
     return ref.getDownloadURL();
   }
@@ -52,16 +57,17 @@ class _CategoryListState extends State<CategoryList> {
         //     .isBefore(DateTime.now())) {
         //   await FirebaseDatabase.instance.ref().child("booking").child(element.key).remove();
         // } else {
-          dataKey.add(element.value['id_ternak']);
+        dataKey.add(element.value['id_ternak']);
         // }
       });
       setState(() {});
-      playVoiceover('maiwa pilih ${voiceKategori(widget.kategori.toLowerCase())} napa mbuham');
+      playVoiceover(
+          'maiwa pilih ${voiceKategori(widget.kategori.toLowerCase())} napa mbuham');
     });
   }
 
-  voiceKategori(String ternak){
-    switch(ternak){
+  voiceKategori(String ternak) {
+    switch (ternak) {
       case 'sapi':
         return "hapi";
       case 'kuda':
@@ -70,9 +76,7 @@ class _CategoryListState extends State<CategoryList> {
         return "karambo";
       case 'kambing':
         return "kamambi";
-
     }
-
   }
 
   @override
@@ -80,9 +84,9 @@ class _CategoryListState extends State<CategoryList> {
     super.initState();
     getDataBooking();
   }
+
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Warna.latar,
@@ -115,11 +119,17 @@ class _CategoryListState extends State<CategoryList> {
               ),
               Expanded(
                 child: StreamBuilder(
-                  stream: FirebaseDatabase.instance.ref().child("ternak").child(widget.kategori.toLowerCase()).onValue,
+                  stream: FirebaseDatabase.instance
+                      .ref()
+                      .child("ternak")
+                      .child(widget.kategori.toLowerCase())
+                      .onValue,
                   builder: (context, snapshot) {
-                    if (snapshot.hasData && (snapshot.data!).snapshot.value != null) {
+                    if (snapshot.hasData &&
+                        (snapshot.data!).snapshot.value != null) {
                       Map<dynamic, dynamic> data = Map<dynamic, dynamic>.from(
-                          (snapshot.data! as DatabaseEvent).snapshot.value as Map<dynamic, dynamic>);
+                          (snapshot.data! as DatabaseEvent).snapshot.value
+                              as Map<dynamic, dynamic>);
                       List<Map<dynamic, dynamic>> dataList = [];
                       data.removeWhere((key, value) {
                         return dataKey.contains(key);
@@ -138,10 +148,11 @@ class _CategoryListState extends State<CategoryList> {
                           'harga': currentData['harga'],
                         });
                       });
-                      
+
                       if (dataList.length != 0) {
                         return GridView.builder(
-                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 2, // Number of columns
                             crossAxisSpacing: 10, // Spacing between columns
                             mainAxisSpacing: 10, // Spacing between rows
@@ -149,9 +160,10 @@ class _CategoryListState extends State<CategoryList> {
                           itemCount: dataList.length, // Number of items
                           itemBuilder: (context, index) {
                             return FutureBuilder(
-                              future: getImageFromStorage(dataList[index]['gambar_1'].toString()),
+                              // future: getImageFromStorage("9Fgr9tiyKt-PhotoProfile.png"),
+                              future: getImageFromStorage(
+                                  dataList[index]['gambar_1'].toString()),
                               builder: (context, snapshot) {
-
                                 if (snapshot.hasData) {
                                   print(snapshot.data!);
                                   return GestureDetector(
@@ -161,17 +173,26 @@ class _CategoryListState extends State<CategoryList> {
                                             MaterialPageRoute(
                                                 builder: (ctx) => DetailTernak(
                                                       // url1: snapshot.data!,
-                                                      url1: dataList[index]['gambar_1'].toString(),
-                                                      url2: dataList[index]['gambar_2'].toString(),
-                                                      url3: dataList[index]['gambar_3'].toString(),
-                                                      kategori: widget.kategori.toLowerCase(),
-                                                      uid: dataList[index]['key'],
+                                                      url1: dataList[index]
+                                                              ['gambar_1']
+                                                          .toString(),
+                                                      url2: dataList[index]
+                                                              ['gambar_2']
+                                                          .toString(),
+                                                      url3: dataList[index]
+                                                              ['gambar_3']
+                                                          .toString(),
+                                                      kategori: widget.kategori
+                                                          .toLowerCase(),
+                                                      uid: dataList[index]
+                                                          ['key'],
                                                     )));
                                       },
                                       child: Stack(
                                         children: [
                                           ClipRRect(
-                                              borderRadius: BorderRadius.circular(10),
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
                                               child: Image.network(
                                                   snapshot.data!,
                                                   height: double.infinity,
@@ -184,10 +205,13 @@ class _CategoryListState extends State<CategoryList> {
                                             right: 0,
                                             child: Container(
                                               decoration: BoxDecoration(
-                                                borderRadius: BorderRadius.circular(10),
-                                                gradient:  LinearGradient(
-                                                  colors: [Color(0x494949),
-                                                    Color(0xFF383838),],
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                                gradient: LinearGradient(
+                                                  colors: [
+                                                    Color(0x494949),
+                                                    Color(0xFF383838),
+                                                  ],
                                                   begin: Alignment.topCenter,
                                                   end: Alignment(0, 1),
                                                 ),

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 class Warna {
   static Color latar = Color(0xFF4F6F52);
+  static Color chatAdmin = Color(0xFF475648);
+  static Color chatUser = Color(0xFF4B9658);
   static Color primary = Color(0xFF739072);
   static Color secondary = Color(0xFF86A789);
   static Color tersier = Color(0xFFD2E3C8);

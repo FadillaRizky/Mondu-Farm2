@@ -26,7 +26,7 @@ class _ChatListState extends State<ChatList> {
     });
   }
 
-  Future<String> getImageFromStorage(String pathName, String kategori) {
+  Future<String> getImageFromStorage(String kategori,String pathName) {
     FirebaseStorage storage = FirebaseStorage.instance;
     Reference ref = storage
         .ref()
@@ -112,10 +112,12 @@ class _ChatListState extends State<ChatList> {
                             children: [
                               FutureBuilder(
                                 future: getImageFromStorage(
-                                    data['gambar'],
-                                    dataList[index]['kategori']),
+                                    dataList[index]['kategori'],
+                                  data['gambar_1'],),
                                 builder: (context, snapshot) {
                                   if (snapshot.hasData) {
+                                    // List<Map<dynamic, dynamic>> filteredList =
+                                    // dataList.where((entry) => entry['id_user'] == id_user).toList();
                                     return ClipRRect(
                                       borderRadius: BorderRadius.circular(20),
                                       child: Image.network(

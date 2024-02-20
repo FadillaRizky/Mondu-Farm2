@@ -1,6 +1,8 @@
 import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 import 'package:mondu_farm/detail_nota.dart';
@@ -16,6 +18,16 @@ class ListBooking extends StatefulWidget {
 
 class _ListBookingState extends State<ListBooking> {
   String id_user = "";
+
+  final FlutterTts flutterTts = FlutterTts();
+
+  Future<void> playVoiceover(String text) async {
+    await flutterTts.setLanguage("id-ID");
+    await flutterTts.setPitch(1.0);
+    await flutterTts.setSpeechRate(0.5);
+
+    await flutterTts.speak(text);
+  }
 
   Future<void> getPref() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
@@ -66,6 +78,17 @@ class _ListBookingState extends State<ListBooking> {
     getPref();
   }
 
+  Future<String> getImageFromStorage(String pathName, String kategori) {
+    FirebaseStorage storage = FirebaseStorage.instance;
+    Reference ref = storage
+        .ref()
+        .child("ternak")
+        .child(kategori.toLowerCase())
+        .child(pathName);
+
+    return ref.getDownloadURL();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -105,21 +128,44 @@ class _ListBookingState extends State<ListBooking> {
                     child: Stack(
                       children: [
                         ClipRRect(
-                          borderRadius: BorderRadius.circular(20),
-                          child: Image.network(
-                            filteredList[index]["url_gambar"].toString(),
-                            // "assets/model_sapi.png",
-                            width: double.infinity,
-                            height: 300,
-                            fit: BoxFit.cover,
-                            errorBuilder: (context, obj, stackTrace) {
-                              return Image.asset("assets/placeholder.png");
-                            },
-                            // loadingBuilder: (context, child, loadingProgress) {
-                            //   return CircularProgressIndicator();
-                            // },
-                          ),
-                        ),
+                            borderRadius: BorderRadius.circular(20),
+                            child: FutureBuilder(
+                                future: getImageFromStorage(
+                                    filteredList[index]["url_gambar"]
+                                        .toString(),
+                                    filteredList[index]["kategori"].toString()),
+                                builder: (context, snapshot) {
+                                  if (snapshot.hasData) {
+                                    return Image.network(
+                                      snapshot.data!,
+                                      width: double.infinity,
+                                      height: 300,
+                                      fit: BoxFit.cover,
+                                      errorBuilder: (context, obj, stackTrace) {
+                                        return Image.asset(
+                                            "assets/placeholder.png");
+                                      },
+                                      // loadingBuilder: (context, child, loadingProgress) {
+                                      //   return CircularProgressIndicator();
+                                      // },
+                                    );
+                                  }
+                                  if (snapshot.hasError) {
+                                    return ClipRRect(
+                                      borderRadius: BorderRadius.circular(20),
+                                      child: Image.asset("assets/placeholder.png",width: double.infinity,
+                                        height: 300,),
+                                    );
+                                  }
+                                  return  ClipRRect(
+                                      borderRadius: BorderRadius.circular(20),
+                                      child: Container(
+                                        width: double.infinity,
+                                        height: 300,
+                                        child: Center(child: CircularProgressIndicator(),),
+                                      )
+                                  );
+                                })),
                         Positioned(
                           top: 0,
                           left: 0,
@@ -160,21 +206,39 @@ class _ListBookingState extends State<ListBooking> {
                             bottom: 15,
                             right: 15,
                             child: (filteredList[index]['id_nota'] == "null")
-                                ? Container(
-                              padding: EdgeInsets.symmetric(vertical: 10,horizontal: 25),
-                                    decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(13),
-                                      color: Warna.primary,
-                                    ),
+                                ?
+                                //   ? Container(
+                                // padding: EdgeInsets.symmetric(vertical: 10,horizontal: 25),
+                                //       decoration: BoxDecoration(
+                                //       borderRadius: BorderRadius.circular(13),
+                                //         color: Warna.primary,
+                                //       ),
+                                //       child: Icon(
+                                //         Icons.sync,
+                                //         color: Colors.white,
+                                //       )),
+                                ElevatedButton(
+                                    style: ButtonStyle(
+                                        backgroundColor: MaterialStateProperty.all(
+                                            Warna.primary),
+                                        shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(13)))),
+                                    onPressed: () {
+                                      playVoiceover(
+                                          "na hurat mu talanga padoi");
+                                    },
                                     child: Icon(
                                       Icons.sync,
                                       color: Colors.white,
-                                    ))
+                                    )
+
+                                    // Icon(Icons.file_copy,color: Colors.white,)
+                                    )
                                 : ElevatedButton(
                                     style: ButtonStyle(
-                                        backgroundColor:
-                                            MaterialStateProperty.all(
-                                                Warna.primary),
+                                        backgroundColor: MaterialStateProperty.all(
+                                            Warna.primary),
                                         shape: MaterialStateProperty.all(
                                             RoundedRectangleBorder(
                                                 borderRadius:
@@ -197,8 +261,7 @@ class _ListBookingState extends State<ListBooking> {
                                     },
                                     child: SizedBox(
                                         height: 30,
-                                        child: Image.asset(
-                                            "assets/sticky-notes.png"))
+                                        child: Image.asset("assets/sticky-notes.png"))
 
                                     // Icon(Icons.file_copy,color: Colors.white,)
                                     ))
@@ -260,6 +323,7 @@ class _ListBookingState extends State<ListBooking> {
             } else {
               return Center(
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     SizedBox(
                         height: 100,

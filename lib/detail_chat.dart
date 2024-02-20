@@ -71,7 +71,7 @@ class _DetailChatState extends State<DetailChat> {
                   height: 250,
                   // margin: EdgeInsets.all(15),
                   child: FutureBuilder(
-                    future: getImageFromStorage(widget.dataTernak['gambar'], widget.kategori),
+                    future: getImageFromStorage(widget.dataTernak['gambar_1'], widget.kategori),
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
                         return SizedBox(
