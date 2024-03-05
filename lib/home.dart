@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
@@ -35,56 +36,15 @@ class _HomeState extends State<Home> {
 
   final FlutterTts flutterTts = FlutterTts();
 
-  Future<String> getImageFromStorage(String pathName) async{
-    FirebaseStorage storage = await FirebaseStorage.instance;
+  Future<String> getImageFromStorage(String pathName) {
+    FirebaseStorage storage = FirebaseStorage.instance;
+    print("idUser : $id_user");
     Reference ref = storage.ref().child("users").child(id_user).child(pathName);
 
     return ref.getDownloadURL();
   }
 
-  // Future<void> getUserFromFirebase() async {
-  //   try {
-  //     FirebaseDatabase.instance
-  //         .ref()
-  //         .child("users")
-  //         .child(id_user)
-  //         .onValue
-  //         .listen((event) {
-  //       var snapshot = event.snapshot.value as Map;
-  //       setState(() {
-  //         nama = snapshot['nama'];
-  //       });
-  //       print(nama);
-  //     });
-  //   } catch (e) {
-  //     print('Error fetching data: $e');
-  //   }
-  // }
-
-  ImagePicker imageProfile = ImagePicker();
-  File? file;
-  Uint8List webImage = Uint8List(8);
   String? url;
-  // File? file;
-
-
-  getImage1() async {
-    // XFile? img = await imageProfile.pickImage(source: ImageSource.gallery);
-    final ImagePicker _picker = ImagePicker();
-    final XFile? image = await _picker.pickImage(
-        source: ImageSource.camera);
-    var f = await image!.readAsBytes();
-      setState(() {
-        file = File(image.path);
-        webImage = f;
-      });
-
-    // if (img!.path != null) {
-    //   imageFile = File(img.path);
-    // }
-
-    // setState(() {});
-  }
 
   void logout(BuildContext context) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -105,16 +65,11 @@ class _HomeState extends State<Home> {
 
   Future<void> getPref() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
-
     setState(() {
       id_user = pref.getString('id_user')!;
       nama = pref.getString('nama')!;
     });
-
     playVoiceover("maiwa pilih jenis mbada napa mbuham ");
-    // setState(()  {
-    //    getUserFromFirebase();
-    // });
   }
 
   // getDatafromFirebase(){
@@ -134,8 +89,6 @@ class _HomeState extends State<Home> {
   //     print('Error fetching data: $e');
   //   }
   // }
-
-
 
   @override
   void initState() {
@@ -187,86 +140,98 @@ class _HomeState extends State<Home> {
                                       insetPadding: EdgeInsets.all(10),
                                       backgroundColor: Colors.white,
                                       elevation: 1,
-                                      child: Profile(id_user: id_user,url: url,)
-                                    // Padding(
-                                    //   padding: const EdgeInsets.all(20),
-                                    //   child: Column(
-                                    //     mainAxisSize: MainAxisSize.min,
-                                    //     children: [
-                                    //       GestureDetector(
-                                    //         onTap: () {
-                                    //           setState((){
-                                    //             getImage1();
-                                    //           });
-                                    //
-                                    //           // setState((){});
-                                    //         },
-                                    //         child: SizedBox(
-                                    //           height: 250,
-                                    //           width: 250,
-                                    //           child: ClipRRect(
-                                    //               borderRadius:
-                                    //               BorderRadius
-                                    //                   .circular(
-                                    //                   1000),
-                                    //               child: file != null
-                                    //                   ? Image.file(
-                                    //                 file!,
-                                    //                 fit: BoxFit.cover,)
-                                    //                   : Icon(
-                                    //                 Icons.add_a_photo,
-                                    //                 size: 50,
-                                    //                 color: Colors.white,
-                                    //               )),
-                                    //         ),
-                                    //       ),
-                                    //       SizedBox(
-                                    //         height: 10,
-                                    //       ),
-                                    //       Container(
-                                    //         height: 50,
-                                    //         width: 120,
-                                    //         decoration: BoxDecoration(
-                                    //           border: Border.all(
-                                    //               color: Colors.white),
-                                    //           gradient:
-                                    //           LinearGradient(colors: [
-                                    //             Warna.latar,
-                                    //             Warna.primary,
-                                    //           ]),
-                                    //           borderRadius:
-                                    //           BorderRadius.circular(20),
-                                    //         ),
-                                    //         child: ElevatedButton(
-                                    //             style: ButtonStyle(
-                                    //
-                                    //               // padding: MaterialStateProperty.all(EdgeInsets.all(10)),
-                                    //               //   side: MaterialStateProperty.all(BorderSide(color: Warna.tersier)),
-                                    //                 backgroundColor:
-                                    //                 MaterialStateProperty
-                                    //                     .all(
-                                    //                   // LinearGradient(colors: <Color>[Colors.green, Colors.black],)
-                                    //                     Colors
-                                    //                         .transparent),
-                                    //                 shadowColor:
-                                    //                 MaterialStateProperty
-                                    //                     .all(Colors
-                                    //                     .transparent)),
-                                    //             onPressed: () {
-                                    //               insertData();
-                                    //               setState((){});
-                                    //             },
-                                    //             child: Icon(
-                                    //               Icons.arrow_forward,
-                                    //               color: Colors.white,
-                                    //               size: 30,
-                                    //             )),
-                                    //       ),
-                                    //     ],
-                                    //   ),
-                                    // ),
-                                  );
-                                });
+                                      child: Profile(
+                                        id_user: id_user,
+                                        url: url,
+                                      )
+                                      // Padding(
+                                      //   padding: const EdgeInsets.all(20),
+                                      //   child: Column(
+                                      //     mainAxisSize: MainAxisSize.min,
+                                      //     children: [
+                                      //       GestureDetector(
+                                      //         onTap: () {
+                                      //           setState((){
+                                      //             getImage1();
+                                      //           });
+                                      //
+                                      //           // setState((){});
+                                      //         },
+                                      //         child: SizedBox(
+                                      //           height: 250,
+                                      //           width: 250,
+                                      //           child: ClipRRect(
+                                      //               borderRadius:
+                                      //               BorderRadius
+                                      //                   .circular(
+                                      //                   1000),
+                                      //               child: file != null
+                                      //                   ? Image.file(
+                                      //                 file!,
+                                      //                 fit: BoxFit.cover,)
+                                      //                   : Icon(
+                                      //                 Icons.add_a_photo,
+                                      //                 size: 50,
+                                      //                 color: Colors.white,
+                                      //               )),
+                                      //         ),
+                                      //       ),
+                                      //       SizedBox(
+                                      //         height: 10,
+                                      //       ),
+                                      //       Container(
+                                      //         height: 50,
+                                      //         width: 120,
+                                      //         decoration: BoxDecoration(
+                                      //           border: Border.all(
+                                      //               color: Colors.white),
+                                      //           gradient:
+                                      //           LinearGradient(colors: [
+                                      //             Warna.latar,
+                                      //             Warna.primary,
+                                      //           ]),
+                                      //           borderRadius:
+                                      //           BorderRadius.circular(20),
+                                      //         ),
+                                      //         child: ElevatedButton(
+                                      //             style: ButtonStyle(
+                                      //
+                                      //               // padding: MaterialStateProperty.all(EdgeInsets.all(10)),
+                                      //               //   side: MaterialStateProperty.all(BorderSide(color: Warna.tersier)),
+                                      //                 backgroundColor:
+                                      //                 MaterialStateProperty
+                                      //                     .all(
+                                      //                   // LinearGradient(colors: <Color>[Colors.green, Colors.black],)
+                                      //                     Colors
+                                      //                         .transparent),
+                                      //                 shadowColor:
+                                      //                 MaterialStateProperty
+                                      //                     .all(Colors
+                                      //                     .transparent)),
+                                      //             onPressed: () {
+                                      //               insertData();
+                                      //               setState((){});
+                                      //             },
+                                      //             child: Icon(
+                                      //               Icons.arrow_forward,
+                                      //               color: Colors.white,
+                                      //               size: 30,
+                                      //             )),
+                                      //       ),
+                                      //     ],
+                                      //   ),
+                                      // ),
+                                      );
+                                }).then((value) {
+                              // Timer(Duration(seconds: 5), () {
+                              //   setState(() {
+                              //
+                              //   });
+                              // });
+                              setState(() {
+                                url = null;
+                              });
+                            });
                           },
                           child: StreamBuilder(
                             stream: FirebaseDatabase.instance
@@ -277,40 +242,51 @@ class _HomeState extends State<Home> {
                             builder: (context, snapshot) {
                               if (snapshot.hasData &&
                                   (snapshot.data!).snapshot.value != null) {
-                                Map<dynamic, dynamic> data = Map<dynamic, dynamic>.from(
-                                    (snapshot.data! as DatabaseEvent).snapshot.value
-                                    as Map<dynamic, dynamic>);
+                                Map<dynamic, dynamic> data =
+                                    Map<dynamic, dynamic>.from(
+                                        (snapshot.data! as DatabaseEvent)
+                                            .snapshot
+                                            .value as Map<dynamic, dynamic>);
                                 print("cetak data : ${data["photo_url"]}");
                                 // print("cetak snapshot : ${snapshot.data}");
                                 return FutureBuilder(
-                                    future: getImageFromStorage(data["photo_url"] ?? ""),
+                                    future: getImageFromStorage(
+                                        data["photo_url"] ?? ""),
                                     builder: (context, snapshot) {
-                                      if (data["photo_url"] == null || data["photo_url"] == "null") {
+                                      if (data["photo_url"] == null ||
+                                          data["photo_url"] == "null") {
                                         return Icon(
                                           Icons.person,
                                           color: Colors.white,
                                         );
                                       }
                                       if (snapshot.hasData) {
+                                        print(
+                                            "photo from firebase : ${snapshot.data}");
+                                        url = null;
                                         url = snapshot.data;
                                         return SizedBox(
                                           width: 40,
                                           height: 40,
                                           child: ClipRRect(
                                               borderRadius:
-                                              BorderRadius.circular(10000),
+                                                  BorderRadius.circular(10000),
                                               child: Image.network(
                                                 snapshot.data!,
                                                 fit: BoxFit.cover,
                                               )),
                                         );
                                       }
+
                                       if (snapshot.hasError) {
+                                        print(
+                                            "snapshot error : ${snapshot.error}");
                                         return Icon(
                                           Icons.person,
-                                          color: Colors.white,
+                                          color: Colors.green,
                                         );
                                       }
+
                                       return Center(
                                         child: CircularProgressIndicator(),
                                       );
@@ -328,162 +304,6 @@ class _HomeState extends State<Home> {
                             },
                           ),
                         ),
-                        // GestureDetector(
-                        //   onTap: () {
-                        //     showDialog(
-                        //         context: context,
-                        //         barrierDismissible: true,
-                        //         builder: (BuildContext context) {
-                        //           return Dialog(
-                        //             shape: RoundedRectangleBorder(
-                        //                 borderRadius: BorderRadius.all(
-                        //                     Radius.circular(20))),
-                        //             insetPadding: EdgeInsets.all(10),
-                        //             backgroundColor: Colors.white,
-                        //             elevation: 1,
-                        //             child: Profile(id_user: id_user)
-                        //             // Padding(
-                        //             //   padding: const EdgeInsets.all(20),
-                        //             //   child: Column(
-                        //             //     mainAxisSize: MainAxisSize.min,
-                        //             //     children: [
-                        //             //       GestureDetector(
-                        //             //         onTap: () {
-                        //             //           setState((){
-                        //             //             getImage1();
-                        //             //           });
-                        //             //
-                        //             //           // setState((){});
-                        //             //         },
-                        //             //         child: SizedBox(
-                        //             //           height: 250,
-                        //             //           width: 250,
-                        //             //           child: ClipRRect(
-                        //             //               borderRadius:
-                        //             //               BorderRadius
-                        //             //                   .circular(
-                        //             //                   1000),
-                        //             //               child: file != null
-                        //             //                   ? Image.file(
-                        //             //                 file!,
-                        //             //                 fit: BoxFit.cover,)
-                        //             //                   : Icon(
-                        //             //                 Icons.add_a_photo,
-                        //             //                 size: 50,
-                        //             //                 color: Colors.white,
-                        //             //               )),
-                        //             //         ),
-                        //             //       ),
-                        //             //       SizedBox(
-                        //             //         height: 10,
-                        //             //       ),
-                        //             //       Container(
-                        //             //         height: 50,
-                        //             //         width: 120,
-                        //             //         decoration: BoxDecoration(
-                        //             //           border: Border.all(
-                        //             //               color: Colors.white),
-                        //             //           gradient:
-                        //             //           LinearGradient(colors: [
-                        //             //             Warna.latar,
-                        //             //             Warna.primary,
-                        //             //           ]),
-                        //             //           borderRadius:
-                        //             //           BorderRadius.circular(20),
-                        //             //         ),
-                        //             //         child: ElevatedButton(
-                        //             //             style: ButtonStyle(
-                        //             //
-                        //             //               // padding: MaterialStateProperty.all(EdgeInsets.all(10)),
-                        //             //               //   side: MaterialStateProperty.all(BorderSide(color: Warna.tersier)),
-                        //             //                 backgroundColor:
-                        //             //                 MaterialStateProperty
-                        //             //                     .all(
-                        //             //                   // LinearGradient(colors: <Color>[Colors.green, Colors.black],)
-                        //             //                     Colors
-                        //             //                         .transparent),
-                        //             //                 shadowColor:
-                        //             //                 MaterialStateProperty
-                        //             //                     .all(Colors
-                        //             //                     .transparent)),
-                        //             //             onPressed: () {
-                        //             //               insertData();
-                        //             //               setState((){});
-                        //             //             },
-                        //             //             child: Icon(
-                        //             //               Icons.arrow_forward,
-                        //             //               color: Colors.white,
-                        //             //               size: 30,
-                        //             //             )),
-                        //             //       ),
-                        //             //     ],
-                        //             //   ),
-                        //             // ),
-                        //           );
-                        //         }).then((value) {
-                        //           setState(() {
-                        //
-                        //           });
-                        //     });
-                        //     setState(() {
-                        //
-                        //     });
-                        //   },
-                        //   child: StreamBuilder(
-                        //     stream: FirebaseDatabase.instance
-                        //         .ref()
-                        //         .child("users")
-                        //         .child(id_user)
-                        //         .onValue,
-                        //     builder: (context, snapshot) {
-                        //       if (snapshot.hasData &&
-                        //           (snapshot.data!).snapshot.value != null) {
-                        //         Map<dynamic, dynamic> data = Map<dynamic, dynamic>.from(
-                        //             (snapshot.data! as DatabaseEvent).snapshot.value
-                        //             as Map<dynamic, dynamic>);
-                        //         print("cetak data : ${data["photo_url"]}");
-                        //         print("cetak id_user : ${id_user}");
-                        //         return FutureBuilder(
-                        //             // future: getImageFromStorage(data["photo_url"]),
-                        //             future: FirebaseStorage.instance.ref().child("users").child(id_user).child(data["photo_url"]).getDownloadURL(),
-                        //             builder: (context, snapshot) {
-                        //               if (snapshot.hasData) {
-                        //                 print("snapshot : ${snapshot.data}");
-                        //                 return SizedBox(
-                        //                   width: 40,
-                        //                   height: 40,
-                        //                   child: ClipRRect(
-                        //                       borderRadius:
-                        //                       BorderRadius.circular(10000),
-                        //                       child: Image.network(
-                        //                         snapshot.data!,
-                        //                         fit: BoxFit.cover,
-                        //                       )),
-                        //                 );
-                        //               }
-                        //               if (snapshot.hasError) {
-                        //                 return Icon(
-                        //                   Icons.person,
-                        //                   color: Colors.white,
-                        //                 );
-                        //               }
-                        //               return Center(
-                        //                 child: CircularProgressIndicator(),
-                        //               );
-                        //             });
-                        //       }
-                        //       if (snapshot.hasData) {
-                        //         return Icon(
-                        //           Icons.person,
-                        //           color: Colors.red,
-                        //         );
-                        //       }
-                        //       return Center(
-                        //         child: CircularProgressIndicator(),
-                        //       );
-                        //     },
-                        //   ),
-                        // ),
                         SizedBox(
                           width: 10,
                         ),
@@ -546,22 +366,21 @@ class _HomeState extends State<Home> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (ctx) =>
-                                (index == 0)
+                                builder: (ctx) => (index == 0)
                                     ? CategoryList(
-                                  kategori: 'Sapi',
-                                )
+                                        kategori: 'Sapi',
+                                      )
                                     : (index == 1)
-                                    ? CategoryList(
-                                  kategori: "Kuda",
-                                )
-                                    : (index == 2)
-                                    ? CategoryList(
-                                  kategori: "Kerbau",
-                                )
-                                    : CategoryList(
-                                  kategori: "Kambing",
-                                )));
+                                        ? CategoryList(
+                                            kategori: "Kuda",
+                                          )
+                                        : (index == 2)
+                                            ? CategoryList(
+                                                kategori: "Kerbau",
+                                              )
+                                            : CategoryList(
+                                                kategori: "Kambing",
+                                              )));
                       },
                       child: ClipRRect(
                           borderRadius: BorderRadius.circular(10.0),
@@ -583,7 +402,7 @@ class _HomeState extends State<Home> {
                             padding: MaterialStateProperty.all(
                                 EdgeInsets.fromLTRB(18, 10, 18, 18)),
                             backgroundColor:
-                            MaterialStateProperty.all(Warna.secondary)),
+                                MaterialStateProperty.all(Warna.secondary)),
                         onPressed: () {
                           Navigator.push(context,
                               MaterialPageRoute(builder: (ctx) => ChatList()));
@@ -596,7 +415,7 @@ class _HomeState extends State<Home> {
                             padding: MaterialStateProperty.all(
                                 EdgeInsets.fromLTRB(18, 10, 18, 18)),
                             backgroundColor:
-                            MaterialStateProperty.all(Warna.secondary)),
+                                MaterialStateProperty.all(Warna.secondary)),
                         onPressed: () {
                           Navigator.push(
                               context,

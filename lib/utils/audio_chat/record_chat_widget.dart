@@ -176,6 +176,7 @@ class _RecordChatWidgetState extends State<RecordChatWidget> {
   StreamSubscription? _recordingDataSubscription;
 
   FlutterSoundPlayer playerModule = FlutterSoundPlayer();
+  FlutterSound flutterSound =  FlutterSound();
   FlutterSoundRecorder recorderModule = FlutterSoundRecorder();
 
   Duration _recorderDuration = Duration();
@@ -205,7 +206,8 @@ class _RecordChatWidgetState extends State<RecordChatWidget> {
 
   Future<void> openTheRecorder() async {
     if (!kIsWeb) {
-      var status = await Permission.microphone.request();
+      var status = await Permission.microphone.request(
+      );
       if (status != PermissionStatus.granted) {
         throw RecordingPermissionException('Microphone permission not granted');
       }
@@ -235,13 +237,16 @@ class _RecordChatWidgetState extends State<RecordChatWidget> {
       avAudioSessionRouteSharingPolicy:
           AVAudioSessionRouteSharingPolicy.defaultPolicy,
       avAudioSessionSetActiveOptions: AVAudioSessionSetActiveOptions.none,
+
       androidAudioAttributes: const AndroidAudioAttributes(
         contentType: AndroidAudioContentType.speech,
         flags: AndroidAudioFlags.none,
         usage: AndroidAudioUsage.voiceCommunication,
+
       ),
       androidAudioFocusGainType: AndroidAudioFocusGainType.gain,
       androidWillPauseWhenDucked: true,
+
     ));
   }
 
@@ -309,7 +314,8 @@ class _RecordChatWidgetState extends State<RecordChatWidget> {
     try {
       // Request Microphone permission if needed
       if (!kIsWeb) {
-        var status = await Permission.microphone.request();
+        var status = await Permission.microphone.request(
+        );
         if (status != PermissionStatus.granted) {
           throw RecordingPermissionException(
               'Microphone permission not granted');

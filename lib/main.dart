@@ -41,8 +41,9 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
           fontFamily: 'Poppins'
       ),
-      home: LoginPage()
-      // DemoPage(),
+      home:
+      // LoginPage()
+      DemoPage(),
     );
   }
 }

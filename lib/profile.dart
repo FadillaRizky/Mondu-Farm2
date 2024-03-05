@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:mondu_farm/home.dart';
 import 'package:mondu_farm/utils/color.dart';
 import 'package:mondu_farm/utils/custom_extension.dart';
 
@@ -95,23 +96,23 @@ class _ProfileState extends State<Profile> {
             .child(widget.id_user)
             .child(imageName);
 
-        if (!kIsWeb) {
-          imagefile.putFile(file!, metadata);
-        }
-
         EasyLoading.show(status: 'loading...');
-        await FirebaseDatabase.instance
+        FirebaseDatabase.instance
             .ref()
             .child("users")
             .child(widget.id_user)
             .update({
           "photo_url": imageName,
-        }).whenComplete(() {
-          EasyLoading.showSuccess('Berhasil',
-              dismissOnTap: true, duration: const Duration(seconds: 5));
-          Navigator.pop(context);
-          return;
+        }).then((value) {
+          imagefile.putFile(file!).whenComplete(() {
+            EasyLoading.showSuccess('Upload Success..',
+                dismissOnTap: true, duration: const Duration(seconds: 2));
+            Navigator.pop(context);
+            return;
+          });
         });
+
+
       }
     } on Exception catch (e) {
       EasyLoading.showError('Error : ${e}',

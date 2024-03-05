@@ -55,6 +55,8 @@ class _LoginPageState extends State<LoginPage> {
         Navigator.of(context)
             .pushReplacement(MaterialPageRoute(builder: (context) => Home()));
       });
+    } else{
+      flutterTts.speak("maiwa ko daftar melalui Isi ngara ndang nomor telepon");
     }
   }
 
@@ -68,7 +70,7 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    flutterTts.speak("maiwa ko daftar melalui Isi ngara ndang nomor telepon");
+
     return Scaffold(
       backgroundColor: Warna.latar,
       body: SafeArea(

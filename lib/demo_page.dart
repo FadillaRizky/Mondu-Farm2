@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:mondu_farm/demo_page2.dart';
 import 'package:mondu_farm/login_page.dart';
 import 'package:mondu_farm/utils/color.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:video_player/video_player.dart';
 
 class DemoPage extends StatefulWidget {
@@ -16,9 +18,21 @@ class _DemoPageState extends State<DemoPage> {
   late Future<void> _initializeVideoPlayerFuture;
   bool isVideoComplete = false;
 
+  void cekUser() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    bool? isLogin = pref.getBool('firstTime');
+    if (isLogin == true) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Navigator.of(context)
+            .pushReplacement(MaterialPageRoute(builder: (context) => LoginPage()));
+      });
+    }
+  }
+
   @override
   void initState() {
     super.initState();
+    cekUser();
     _controller = VideoPlayerController.asset('assets/video_sample.mp4');
     _initializeVideoPlayerFuture = _controller.initialize();
 
@@ -86,35 +100,12 @@ class _DemoPageState extends State<DemoPage> {
                 },
               ),
         ),
-        // Center(
-        //   child: _controller.value.isInitialized
-        //       ? AspectRatio(
-        //           aspectRatio: 9 / 16,
-        //           child: VideoPlayer(_controller),
-        //         )
-        //       : Text("error"),
-        // ),
-        // floatingActionButton: FloatingActionButton(
-        //   onPressed: () {
-        //     setState(() {
-        //       _controller.value.isCompleted
-        //           ? Navigator.push(context, MaterialPageRoute(builder: (ctx)=>LoginPage()))
-        //       : _controller.play();
-        //     });
-        //   },
-        //   child: Icon(
-        //     _controller.value.isCompleted
-        //     ? Icons.arrow_forward_ios
-        //     : Icons.play_arrow
-        //   ),
-        // ),
-        ///
         floatingActionButton:
         isVideoComplete
             ? FloatingActionButton(
           backgroundColor: Warna.ungu,
                 onPressed: () {
-                  Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (ctx)=>LoginPage()),(route) => false,);
+                  Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (ctx)=>DemoPage2()),(route) => false,);
                 },
                 child: Icon(Icons.arrow_forward_ios,color: Colors.white,),
               )
