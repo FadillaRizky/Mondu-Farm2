@@ -31,7 +31,7 @@ class _AudioChatWidgetState extends State<AudioChatWidget> {
   Future<void> _initAudioPlayer() async {
     try {
       await _audioPlayer.setUrl(widget.data['pesan']);
-      await _audioPlayer.setVolume(100.0);
+      await _audioPlayer.setVolume(10.0);
       _audioPlayer.durationStream.listen((duration) {
         setState(() {
           _sliderValue = 0.0;
