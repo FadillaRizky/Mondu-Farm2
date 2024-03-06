@@ -27,9 +27,9 @@ class Chat {
   static Future<void> InsertChat(String filePath, int durasi, String idUser, String idTernak,String kategori,BuildContext context) async {
     // -NnJThg-A5k5iNE8Z1VT
     var metadata = SettableMetadata(
-      contentType: "audio/mp4",
+      contentType: "audio/mp3",
     );
-    String fileName = "${generateRandomString(10)}-${DateTime.now()}.mp4";
+    String fileName = "${generateRandomString(10)}-${DateTime.now()}.mp3";
     var fileStorage = FirebaseStorage.instance.ref().child("audio").child(fileName);
     var dbRef = FirebaseDatabase.instance.ref().child("pesan").child(idUser).child(idTernak);
 
