@@ -95,6 +95,12 @@ flutter:
     - assets/logo_mondu.jpg
     - assets/icon_login.svg
     - assets/logo_mondu.png
+    - assets/tutorial_daftar.mp4
+    - assets/tutorial_cek_ternak.mp4
+    - assets/tutorial_booking.mp4
+    - assets/tutorial_negosiasi.mp4
+    - assets/tutorial_nota_belum_terbit.mp4
+    - assets/tutorial_nota_terbit.mp4
 
 
 

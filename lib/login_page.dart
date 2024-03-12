@@ -5,9 +5,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_tts/flutter_tts.dart';
+import 'package:lottie/lottie.dart';
+import 'package:mondu_farm/demo_page.dart';
 import 'package:mondu_farm/utils/color.dart';
 import 'package:mondu_farm/utils/voice_over.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:video_player/video_player.dart';
 
 import 'auth/login.dart';
 import 'home.dart';
@@ -28,14 +31,14 @@ class _LoginPageState extends State<LoginPage> {
   bool ignorePointer = false;
   Timer? ignorePointerTimer;
 
+  late VideoPlayerController _controller;
+  late Future<void> _initializeVideoPlayerFuture;
+  bool isVideoComplete = false;
+
   void login() {
     var name = nameController.text;
     var phoneNumber = phoneNumberController.text;
-    var data = {
-      'nama': name,
-      'no_telepon': phoneNumber,
-      'photo_url' : "null"
-    };
+    var data = {'nama': name, 'no_telepon': phoneNumber, 'photo_url': "null"};
     Auth.login(data, context);
   }
 
@@ -55,7 +58,7 @@ class _LoginPageState extends State<LoginPage> {
         Navigator.of(context)
             .pushReplacement(MaterialPageRoute(builder: (context) => Home()));
       });
-    } else{
+    } else {
       flutterTts.speak("maiwa ko daftar melalui Isi ngara ndang nomor telepon");
     }
   }
@@ -63,16 +66,133 @@ class _LoginPageState extends State<LoginPage> {
   void initState() {
     super.initState();
     cekUser();
+    _controller = VideoPlayerController.asset('assets/video_sample.mp4');
+    _initializeVideoPlayerFuture = _controller.initialize();
+
+    // Add a listener to check when the video playback is complete
+    _controller.addListener(() {
+      if (_controller.value.position == _controller.value.duration) {
+        setState(() {
+          isVideoComplete = true;
+        });
+      }
+    });
     // flutterTts.setLanguage("id-ID");
     // flutterTts.setPitch(1.0);
     // flutterTts.setSpeechRate(0.5);
   }
 
+  void playAgain() {
+    _controller.seekTo(Duration.zero);
+    _controller.play();
+
+    isVideoComplete = false;
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       backgroundColor: Warna.latar,
+      appBar: AppBar(
+        backgroundColor: Warna.latar,
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 5),
+            child: IconButton(
+              style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(Colors.white38)),
+              onPressed: () {
+                Navigator.push(context, MaterialPageRoute(builder: (ctx) => DemoPage(url:'assets/tutorial_daftar.mp4' ,)));
+                // showDialog(
+                //     context: context,
+                //     builder: (context) {
+                //       return AlertDialog(
+                //         icon: StatefulBuilder(
+                //           builder: (BuildContext context, StateSetter statestate){
+                //             return FutureBuilder(
+                //               future: _initializeVideoPlayerFuture,
+                //               builder: (context, snapshot) {
+                //                 if (snapshot.connectionState ==
+                //                     ConnectionState.done) {
+                //                   return Container(
+                //                     height: 500,
+                //                     child: Stack(
+                //                       children: [
+                //                         AspectRatio(
+                //                           aspectRatio: 9 / 16,
+                //                           child: VideoPlayer(_controller),
+                //                         ),
+                //                         _controller.value.isPlaying
+                //                             ? SizedBox()
+                //                             : Center(
+                //                           child: IconButton(
+                //                               style: ButtonStyle(
+                //                                   backgroundColor:
+                //                                   MaterialStateProperty
+                //                                       .all(Warna
+                //                                       .ungu)),
+                //                               onPressed: () {
+                //                                 playAgain();
+                //                                 setState(() {
+                //
+                //                                 });
+                //                                 // setState(() {
+                //                                 //   isVideoComplete = false;
+                //                                 // });
+                //                               },
+                //                               icon: Icon(
+                //                                 Icons.play_arrow,
+                //                                 size: 100,
+                //                                 color: Colors.white,
+                //                               )),
+                //                         )
+                //                       ],
+                //                     ),
+                //                   );
+                //                 } else {
+                //                   return Center(
+                //                     child: CircularProgressIndicator(),
+                //                   );
+                //                 }
+                //               },
+                //             );
+                //           },
+                //         ),
+                //         shape: RoundedRectangleBorder(
+                //             borderRadius: BorderRadius.circular(5)),
+                //         actions: [
+                //           SizedBox(
+                //             width: double.infinity,
+                //             child: TextButton(
+                //                 style: ButtonStyle(
+                //                     backgroundColor:
+                //                         MaterialStateProperty.all(Colors.green),
+                //                     shape: MaterialStateProperty.all(
+                //                       RoundedRectangleBorder(
+                //                         borderRadius: BorderRadius.circular(4),
+                //                         side: BorderSide(
+                //                           color: Colors.black38,
+                //                         ),
+                //                       ),
+                //                     )),
+                //                 onPressed: () {
+                //                   Navigator.pop(context);
+                //                 },
+                //                 child: Icon(
+                //                   Icons.arrow_back,
+                //                   color: Colors.white,
+                //                 )),
+                //           ),
+                //         ],
+                //       );
+                //     });
+              },
+              icon: Icon(Icons.play_arrow),
+            ),
+          ),
+        ],
+      ),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 25),
@@ -250,34 +370,35 @@ class _LoginPageState extends State<LoginPage> {
                               borderRadius: BorderRadius.circular(20),
                             ),
                             child: ElevatedButton(
-                              style: ButtonStyle(
-                                
-                                // padding: MaterialStateProperty.all(EdgeInsets.all(10)),
-                                //   side: MaterialStateProperty.all(BorderSide(color: Warna.tersier)),
-                                  backgroundColor: MaterialStateProperty.all(
-                                    // LinearGradient(colors: <Color>[Colors.green, Colors.black],)
-                                      Colors.transparent
-                                  ),
-                                shadowColor: MaterialStateProperty.all(Colors.transparent)
+                                style: ButtonStyle(
 
-                              ),
-                              onPressed: () {
-                                if (formkey.currentState!.validate()) {
-                                  setState(() {
-                                    ignorePointer = true;
-                                    ignorePointerTimer =
-                                        Timer(const Duration(seconds: 2), () {
-                                      setState(() {
-                                        ignorePointer = false;
+                                    // padding: MaterialStateProperty.all(EdgeInsets.all(10)),
+                                    //   side: MaterialStateProperty.all(BorderSide(color: Warna.tersier)),
+                                    backgroundColor: MaterialStateProperty.all(
+                                        // LinearGradient(colors: <Color>[Colors.green, Colors.black],)
+                                        Colors.transparent),
+                                    shadowColor: MaterialStateProperty.all(
+                                        Colors.transparent)),
+                                onPressed: () {
+                                  if (formkey.currentState!.validate()) {
+                                    setState(() {
+                                      ignorePointer = true;
+                                      ignorePointerTimer =
+                                          Timer(const Duration(seconds: 2), () {
+                                        setState(() {
+                                          ignorePointer = false;
+                                        });
                                       });
                                     });
-                                  });
-                                  // Menjalanan kan logic Simpan data lembur
-                                  login();
-                                }
-                              },
-                              child: Icon(Icons.arrow_forward,color: Colors.white,size: 30,)
-                            ),
+                                    // Menjalanan kan logic Simpan data lembur
+                                    login();
+                                  }
+                                },
+                                child: Icon(
+                                  Icons.arrow_forward,
+                                  color: Colors.white,
+                                  size: 30,
+                                )),
                           ),
                         ],
                       ),

@@ -12,6 +12,7 @@ import 'package:flutter_tts/flutter_tts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mondu_farm/booking.dart';
 import 'package:mondu_farm/change_profile.dart';
+import 'package:mondu_farm/demo_page2.dart';
 import 'package:mondu_farm/list_booking.dart';
 import 'package:mondu_farm/list_kategori.dart';
 import 'package:mondu_farm/chat_list.dart';
@@ -131,7 +132,7 @@ class _HomeState extends State<Home> {
                           onTap: () {
                             showDialog(
                                 context: context,
-                                barrierDismissible: true,
+                                barrierDismissible: false,
                                 builder: (BuildContext context) {
                                   return Dialog(
                                       shape: RoundedRectangleBorder(
@@ -313,23 +314,39 @@ class _HomeState extends State<Home> {
                         )
                       ],
                     ),
-                    IconButton(
-                        onPressed: () {
-                          Alerts.showAlertYesNo(
-                            url: "assets/lottie/logout.json",
-                            onPressYes: () async {
-                              logout(context);
+                    Row(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(right: 5),
+                          child: IconButton(
+                            style: ButtonStyle(
+                                backgroundColor:
+                                    MaterialStateProperty.all(Colors.white24)),
+                            onPressed: () {
+                              Navigator.push(context, MaterialPageRoute(builder: (ctx) => DemoPage2()));
                             },
-                            onPressNo: () {
-                              Navigator.pop(context);
+                            icon: Icon(Icons.play_arrow,color: Colors.white,),
+                          ),
+                        ),
+                        IconButton(
+                            onPressed: () {
+                              Alerts.showAlertYesNo(
+                                url: "assets/lottie/logout.json",
+                                onPressYes: () async {
+                                  logout(context);
+                                },
+                                onPressNo: () {
+                                  Navigator.pop(context);
+                                },
+                                context: context,
+                              );
                             },
-                            context: context,
-                          );
-                        },
-                        icon: Icon(
-                          Icons.logout,
-                          color: Colors.white,
-                        ))
+                            icon: Icon(
+                              Icons.logout,
+                              color: Colors.white,
+                            )),
+                      ],
+                    )
                   ],
                 ),
                 SizedBox(

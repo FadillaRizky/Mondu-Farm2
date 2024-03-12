@@ -96,7 +96,7 @@ class _ProfileState extends State<Profile> {
             .child(widget.id_user)
             .child(imageName);
 
-        EasyLoading.show(status: 'loading...');
+        EasyLoading.show(status: 'Tunggu...');
         FirebaseDatabase.instance
             .ref()
             .child("users")
