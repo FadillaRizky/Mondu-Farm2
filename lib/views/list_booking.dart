@@ -5,7 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
-import 'package:mondu_farm/detail_nota.dart';
+import 'package:mondu_farm/views/detail_nota.dart';
 import 'package:mondu_farm/utils/color.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -207,16 +207,6 @@ class _ListBookingState extends State<ListBooking> {
                             right: 15,
                             child: (filteredList[index]['id_nota'] == "null")
                                 ?
-                                //   ? Container(
-                                // padding: EdgeInsets.symmetric(vertical: 10,horizontal: 25),
-                                //       decoration: BoxDecoration(
-                                //       borderRadius: BorderRadius.circular(13),
-                                //         color: Warna.primary,
-                                //       ),
-                                //       child: Icon(
-                                //         Icons.sync,
-                                //         color: Colors.white,
-                                //       )),
                                 ElevatedButton(
                                     style: ButtonStyle(
                                         backgroundColor: MaterialStateProperty.all(
@@ -232,8 +222,6 @@ class _ListBookingState extends State<ListBooking> {
                                       Icons.sync,
                                       color: Colors.white,
                                     )
-
-                                    // Icon(Icons.file_copy,color: Colors.white,)
                                     )
                                 : ElevatedButton(
                                     style: ButtonStyle(
@@ -262,62 +250,10 @@ class _ListBookingState extends State<ListBooking> {
                                     child: SizedBox(
                                         height: 30,
                                         child: Image.asset("assets/sticky-notes.png"))
-
-                                    // Icon(Icons.file_copy,color: Colors.white,)
                                     ))
                       ],
                     ),
                   );
-                  //   Column(
-                  //   children: [
-                  //     ListTile(
-                  //       title: iconKategori(filteredList[index]["kategori"].toString().toLowerCase()),
-                  //       subtitle: Row(
-                  //         children: [
-                  //           Image.asset("assets/icon_kalender2.png",height: 30),
-                  //           SizedBox(width: 10,),
-                  //           Text("${formatteddate(filteredList[index]["tanggal_booking"].toString())}",style: TextStyle(color: Colors.white),),
-                  //         ],
-                  //       ),
-                  //
-                  //       trailing:
-                  //       (filteredList[index]['id_nota'] == "null")
-                  //           ? Row(
-                  //         mainAxisSize: MainAxisSize.min,
-                  //         mainAxisAlignment: MainAxisAlignment.end,
-                  //             children: [
-                  //               CircleAvatar(
-                  //                   backgroundColor: Warna.primary,
-                  //                   child: Icon(Icons.sync,color: Colors.white,)),
-                  //               SizedBox(width: 15,)
-                  //             ],
-                  //           )
-                  //           : ElevatedButton(
-                  //         style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Warna.ungu)),
-                  //               onPressed: () {
-                  //                 Navigator.push(
-                  //                     context,
-                  //                     MaterialPageRoute(
-                  //                         builder: (ctx) => DetailNota(
-                  //                               nama: filteredList[index]
-                  //                                   ['nama'],
-                  //                               no_telepon:
-                  //                                   filteredList[index]
-                  //                                       ['no_telepon'],
-                  //                               idUser: id_user,
-                  //                               idNota: filteredList[index]
-                  //                                   ['id_nota'],
-                  //                             )));
-                  //               },
-                  //               child: Icon(Icons.file_copy,color: Colors.white,)),
-                  //     ),
-                  //     Divider(
-                  //       color: Colors.white,
-                  //       indent: 10,
-                  //       endIndent: 10,
-                  //     )
-                  //   ],
-                  // );
                 },
               );
             } else {

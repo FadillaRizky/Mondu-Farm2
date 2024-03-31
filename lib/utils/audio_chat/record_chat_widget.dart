@@ -17,7 +17,7 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:path_provider/path_provider.dart';
 
-import '../../chat.dart';
+import '../../logic/chat.dart';
 import '../color.dart';
 
 class RecordChatWidget extends StatefulWidget {

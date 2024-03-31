@@ -9,23 +9,18 @@ import "package:http/http.dart" as http;
 import 'package:mondu_farm/utils/custom_extension.dart';
 
 class Chat {
-  static Future<Uint8List> convertBlobUrlToUint8List(String blobUrl) async {
-    // Fetch the data from the Blob URL
-    var response = await http.get(Uri.parse(blobUrl));
 
-    // Check if the request was successful
+  static Future<Uint8List> convertBlobUrlToUint8List(String blobUrl) async {
+    var response = await http.get(Uri.parse(blobUrl));
     if (response.statusCode == 200) {
-      // Convert the response body (which contains the Blob data) to Uint8List
       Uint8List uint8list = Uint8List.fromList(response.bodyBytes);
       return uint8list;
     } else {
-      // Handle the error if the request fails
       throw Exception('Failed to fetch data from Blob URL');
     }
   }
-
+  ///Logic untuk kirim voicenote ke Firebase
   static Future<void> InsertChat(String filePath, int durasi, String idUser, String idTernak,String kategori,BuildContext context) async {
-    // -NnJThg-A5k5iNE8Z1VT
     var metadata = SettableMetadata(
       contentType: "audio/mp3",
     );
@@ -48,9 +43,7 @@ class Chat {
             "tanggal": DateTime.now().toString(),
           };
           await dbRef.child("data").push().set(data).whenComplete(() {
-            // Navigator.pop(context);
             EasyLoading.dismiss();
-            // EasyLoading.showSuccess('Pesan telah di tambahkan', dismissOnTap: true, duration: Duration(seconds: 3));
           });
         });
       } else {
@@ -63,11 +56,8 @@ class Chat {
             "type": "voice",
             "tanggal": DateTime.now().toString(),
           };
-
           await dbRef.child("data").push().set(data).whenComplete(() {
-            // Navigator.pop(context);
             EasyLoading.dismiss();
-            // EasyLoading.showSuccess('Pesan telah di tambahkan', dismissOnTap: true, duration: Duration(seconds: 3));
           });
         });
       }

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:intl/date_symbol_data_file.dart';
 import 'package:intl/intl.dart';
-import 'package:mondu_farm/detail_ternak.dart';
+import 'package:mondu_farm/views/detail_ternak.dart';
 import 'package:mondu_farm/utils/color.dart';
 
 class DetailNota extends StatefulWidget {

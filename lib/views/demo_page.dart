@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mondu_farm/demo_page2.dart';
-import 'package:mondu_farm/login_page.dart';
+import 'package:mondu_farm/views/demo_page2.dart';
+import 'package:mondu_farm/views/login_page.dart';
 import 'package:mondu_farm/utils/color.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:video_player/video_player.dart';
@@ -19,27 +19,13 @@ class _DemoPageState extends State<DemoPage> {
   late Future<void> _initializeVideoPlayerFuture;
   bool isVideoComplete = false;
 
-  // void cekUser() async {
-  //   SharedPreferences pref = await SharedPreferences.getInstance();
-  //   bool? isLogin = pref.getBool('firstTime');
-  //   if (isLogin == true) {
-  //     WidgetsBinding.instance.addPostFrameCallback((_) {
-  //       Navigator.of(context)
-  //           .pushReplacement(MaterialPageRoute(builder: (context) => LoginPage()));
-  //     });
-  //   }
-  // }
-
 
 
   @override
   void initState() {
     super.initState();
-    // cekUser();
     _controller = VideoPlayerController.asset(widget.url);
     _initializeVideoPlayerFuture = _controller.initialize();
-
-    // Add a listener to check when the video playback is complete
     _controller.addListener(() {
       if (_controller.value.position == _controller.value.duration) {
         setState(() {
@@ -47,10 +33,6 @@ class _DemoPageState extends State<DemoPage> {
         });
       }
     });
-    // _controller = VideoPlayerController.asset("assets/video_sample.mp4")
-    //   ..initialize().then((_) {
-    //     setState(() {});
-    //   });
   }
 
 
@@ -97,9 +79,6 @@ class _DemoPageState extends State<DemoPage> {
                     style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Warna.ungu)),
                       onPressed: (){
                   playAgain();
-                  // setState(() {
-                  //   isVideoComplete = false;
-                  // });
                   }, icon: Icon(Icons.play_arrow,size: 100,color: Colors.white,)),
                   ),
               ],
@@ -118,7 +97,6 @@ class _DemoPageState extends State<DemoPage> {
           backgroundColor: Warna.ungu,
                 onPressed: () {
             Navigator.pop(context);
-                  // Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (ctx)=>DemoPage2()),(route) => false,);
                 },
                 child: Icon(Icons.arrow_forward_ios,color: Colors.white,),
               )

@@ -10,14 +10,14 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:mondu_farm/booking.dart';
-import 'package:mondu_farm/change_profile.dart';
-import 'package:mondu_farm/demo_page2.dart';
-import 'package:mondu_farm/list_booking.dart';
-import 'package:mondu_farm/list_kategori.dart';
-import 'package:mondu_farm/chat_list.dart';
-import 'package:mondu_farm/login_page.dart';
-import 'package:mondu_farm/profile.dart';
+import 'package:mondu_farm/logic/booking.dart';
+import 'package:mondu_farm/logic/change_profile.dart';
+import 'package:mondu_farm/views/demo_page2.dart';
+import 'package:mondu_farm/views/list_booking.dart';
+import 'package:mondu_farm/views/list_kategori.dart';
+import 'package:mondu_farm/views/chat_list.dart';
+import 'package:mondu_farm/views/login_page.dart';
+import 'package:mondu_farm/views/profile.dart';
 import 'package:mondu_farm/utils/alerts.dart';
 import 'package:mondu_farm/utils/color.dart';
 import 'package:mondu_farm/utils/custom_extension.dart';
@@ -52,8 +52,7 @@ class _HomeState extends State<Home> {
     await prefs.remove("isUserLoggedIn");
     await prefs.remove("id_user");
     await prefs.remove("nama");
-    Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (ctx) => LoginPage()));
+    Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (ctx)=>LoginPage()), (route) => false);
   }
 
   Future<void> playVoiceover(String text) async {
@@ -73,42 +72,12 @@ class _HomeState extends State<Home> {
     playVoiceover("maiwa pilih jenis mbada napa mbuham ");
   }
 
-  // getDatafromFirebase(){
-  //   try {
-  //     FirebaseDatabase.instance
-  //         .ref()
-  //         .child("users")
-  //         .child(id_user)
-  //         .onValue
-  //         .listen((event) {
-  //       var snapshot = event.snapshot.value as Map;
-  //       setState(() {
-  //         url = snapshot['photo_url'];
-  //       });
-  //     });
-  //   } catch (e) {
-  //     print('Error fetching data: $e');
-  //   }
-  // }
-
   @override
   void initState() {
     super.initState();
     getPref();
-    // getDatafromFirebase();
-    // test();
   }
 
-  // void test() {
-  //   flutterTts.getVoices.then((value) {
-  //     try {
-  //       List<Map> voices = List<Map>.from(value);
-  //       print(voices);
-  //     } catch (e) {
-  //       print(e);
-  //     }
-  //   });
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -145,90 +114,8 @@ class _HomeState extends State<Home> {
                                         id_user: id_user,
                                         url: url,
                                       )
-                                      // Padding(
-                                      //   padding: const EdgeInsets.all(20),
-                                      //   child: Column(
-                                      //     mainAxisSize: MainAxisSize.min,
-                                      //     children: [
-                                      //       GestureDetector(
-                                      //         onTap: () {
-                                      //           setState((){
-                                      //             getImage1();
-                                      //           });
-                                      //
-                                      //           // setState((){});
-                                      //         },
-                                      //         child: SizedBox(
-                                      //           height: 250,
-                                      //           width: 250,
-                                      //           child: ClipRRect(
-                                      //               borderRadius:
-                                      //               BorderRadius
-                                      //                   .circular(
-                                      //                   1000),
-                                      //               child: file != null
-                                      //                   ? Image.file(
-                                      //                 file!,
-                                      //                 fit: BoxFit.cover,)
-                                      //                   : Icon(
-                                      //                 Icons.add_a_photo,
-                                      //                 size: 50,
-                                      //                 color: Colors.white,
-                                      //               )),
-                                      //         ),
-                                      //       ),
-                                      //       SizedBox(
-                                      //         height: 10,
-                                      //       ),
-                                      //       Container(
-                                      //         height: 50,
-                                      //         width: 120,
-                                      //         decoration: BoxDecoration(
-                                      //           border: Border.all(
-                                      //               color: Colors.white),
-                                      //           gradient:
-                                      //           LinearGradient(colors: [
-                                      //             Warna.latar,
-                                      //             Warna.primary,
-                                      //           ]),
-                                      //           borderRadius:
-                                      //           BorderRadius.circular(20),
-                                      //         ),
-                                      //         child: ElevatedButton(
-                                      //             style: ButtonStyle(
-                                      //
-                                      //               // padding: MaterialStateProperty.all(EdgeInsets.all(10)),
-                                      //               //   side: MaterialStateProperty.all(BorderSide(color: Warna.tersier)),
-                                      //                 backgroundColor:
-                                      //                 MaterialStateProperty
-                                      //                     .all(
-                                      //                   // LinearGradient(colors: <Color>[Colors.green, Colors.black],)
-                                      //                     Colors
-                                      //                         .transparent),
-                                      //                 shadowColor:
-                                      //                 MaterialStateProperty
-                                      //                     .all(Colors
-                                      //                     .transparent)),
-                                      //             onPressed: () {
-                                      //               insertData();
-                                      //               setState((){});
-                                      //             },
-                                      //             child: Icon(
-                                      //               Icons.arrow_forward,
-                                      //               color: Colors.white,
-                                      //               size: 30,
-                                      //             )),
-                                      //       ),
-                                      //     ],
-                                      //   ),
-                                      // ),
                                       );
                                 }).then((value) {
-                              // Timer(Duration(seconds: 5), () {
-                              //   setState(() {
-                              //
-                              //   });
-                              // });
                               setState(() {
                                 url = null;
                               });

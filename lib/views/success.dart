@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:lottie/lottie.dart';
-import 'package:mondu_farm/home.dart';
+import 'package:mondu_farm/views/home.dart';
 import 'package:mondu_farm/utils/color.dart';
 
 class Success extends StatelessWidget {

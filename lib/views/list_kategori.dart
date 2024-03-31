@@ -5,7 +5,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_tts/flutter_tts.dart';
-import 'package:mondu_farm/detail_ternak.dart';
+import 'package:mondu_farm/views/detail_ternak.dart';
 import 'package:mondu_farm/utils/color.dart';
 import 'package:mondu_farm/utils/custom_extension.dart';
 
@@ -52,13 +52,7 @@ class _CategoryListState extends State<CategoryList> {
     await FirebaseDatabase.instance.ref().child('booking').get().then((value) {
       dataTernak = value.value as Map<dynamic, dynamic>;
       dataTernak.entries.forEach((element) {
-        // if (DateTime.parse(element.value['tanggal_booking'].toString())
-        //     .add(Duration(days: 2))
-        //     .isBefore(DateTime.now())) {
-        //   await FirebaseDatabase.instance.ref().child("booking").child(element.key).remove();
-        // } else {
         dataKey.add(element.value['id_ternak']);
-        // }
       });
       setState(() {});
       playVoiceover(

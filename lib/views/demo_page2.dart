@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
-import 'package:mondu_farm/demo_page.dart';
-import 'package:mondu_farm/login_page.dart';
+import 'package:mondu_farm/views/demo_page.dart';
+import 'package:mondu_farm/views/login_page.dart';
 import 'package:mondu_farm/utils/color.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:video_player/video_player.dart';
@@ -73,28 +73,7 @@ class _DemoPage2State extends State<DemoPage2> {
     _initializeVideoPlayerFuture4 = _controller4.initialize();
     _initializeVideoPlayerFuture5 = _controller5.initialize();
     playVoiceover(" Itaya ye nda video tutorial  cara patangar mbada dang kei mbada");
-
-    // _controller1.addListener(() {
-    //   if (_controller1.value.position == _controller1.value.duration) {
-    //     setState(() {
-    //       isVideoComplete = true;
-    //     });
-    //   }
-    // });
-
-    // _controller = VideoPlayerController.asset("assets/video_sample.mp4")
-    //   ..initialize().then((_) {
-    //     setState(() {});
-    //   });
   }
-
-  // void playAgain() {
-  //   _controller1.seekTo(Duration.zero);
-  //   _controller1.play();
-  //
-  //   isVideoComplete = false;
-  //   setState(() {});
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -131,9 +110,6 @@ class _DemoPage2State extends State<DemoPage2> {
                                   ),
                                 ),
                               ),
-                              // _controller1.value.isPlaying
-                              //     ? SizedBox()
-                              //     :
                               Center(
                                 child: IconButton(
                                     style: ButtonStyle(
@@ -142,10 +118,6 @@ class _DemoPage2State extends State<DemoPage2> {
                                             Warna.ungu)
                                     ),
                                     onPressed: () {
-                                      // playAgain();
-                                      // setState(() {
-                                      //   isVideoComplete = false;
-                                      // });
                                       Navigator.push(context, MaterialPageRoute(builder: (ctx)=>DemoPage(url: url[index])));
                                     },
                                     icon: Icon(
@@ -164,38 +136,6 @@ class _DemoPage2State extends State<DemoPage2> {
                   },
                 )
         ),
-        // floatingActionButton: isVideoComplete
-        //     ? FloatingActionButton(
-        //         backgroundColor: Warna.ungu,
-        //         onPressed: () async {
-        //           SharedPreferences prefs =
-        //               await SharedPreferences.getInstance();
-        //           prefs.setBool("firstTime", true);
-        //           Navigator.pushAndRemoveUntil(
-        //             context,
-        //             MaterialPageRoute(builder: (ctx) => LoginPage()),
-        //             (route) => false,
-        //           );
-        //         },
-        //         child: Icon(
-        //           Icons.arrow_forward_ios,
-        //           color: Colors.white,
-        //         ),
-        //       )
-        //     : FloatingActionButton(
-        //         backgroundColor: Warna.ungu,
-        //         onPressed: () {
-        //           setState(() {
-        //             _controller.value.isPlaying
-        //                 ? _controller.pause()
-        //                 : _controller.play();
-        //           });
-        //         },
-        //         child: Icon(
-        //           _controller.value.isPlaying ? Icons.pause : Icons.play_arrow,
-        //           color: Colors.white,
-        //         ),
-        //       )
     );
   }
 

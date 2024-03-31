@@ -2,16 +2,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:mondu_farm/success.dart';
+import 'package:mondu_farm/views/success.dart';
 
 class Booking {
+  ///Logic untuk kirim Data Pesanan (Booking) ke Firebase
   static void insert(BuildContext context, Map<dynamic, dynamic> data) async {
     try {
-      // var key = FirebaseDatabase.instance.ref().child('users').push().key;
-      // var id_booking = FirebaseDatabase.instance.ref().push().key;
       await FirebaseDatabase.instance.ref()
           .child("booking")
-          // .child(key!)
       .push()
           .set({
         "id_user": data['id_user'].toString(),

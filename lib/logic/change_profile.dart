@@ -6,7 +6,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ChangeProfile{
-
+ ///Logic untuk Kirim Foto Profile ke Firebase
   static void insert(String photo_url,BuildContext context)async{
     try{
       EasyLoading.show(status: 'loading...');

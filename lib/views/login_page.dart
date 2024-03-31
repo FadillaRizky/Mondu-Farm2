@@ -6,13 +6,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:lottie/lottie.dart';
-import 'package:mondu_farm/demo_page.dart';
+import 'package:mondu_farm/views/demo_page.dart';
 import 'package:mondu_farm/utils/color.dart';
 import 'package:mondu_farm/utils/voice_over.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:video_player/video_player.dart';
 
-import 'auth/login.dart';
+import '../auth/login.dart';
 import 'home.dart';
 
 class LoginPage extends StatefulWidget {
@@ -93,6 +93,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: Warna.latar,
       appBar: AppBar(
         backgroundColor: Warna.latar,
@@ -104,89 +105,6 @@ class _LoginPageState extends State<LoginPage> {
                   backgroundColor: MaterialStateProperty.all(Colors.white38)),
               onPressed: () {
                 Navigator.push(context, MaterialPageRoute(builder: (ctx) => DemoPage(url:'assets/tutorial_daftar.mp4' ,)));
-                // showDialog(
-                //     context: context,
-                //     builder: (context) {
-                //       return AlertDialog(
-                //         icon: StatefulBuilder(
-                //           builder: (BuildContext context, StateSetter statestate){
-                //             return FutureBuilder(
-                //               future: _initializeVideoPlayerFuture,
-                //               builder: (context, snapshot) {
-                //                 if (snapshot.connectionState ==
-                //                     ConnectionState.done) {
-                //                   return Container(
-                //                     height: 500,
-                //                     child: Stack(
-                //                       children: [
-                //                         AspectRatio(
-                //                           aspectRatio: 9 / 16,
-                //                           child: VideoPlayer(_controller),
-                //                         ),
-                //                         _controller.value.isPlaying
-                //                             ? SizedBox()
-                //                             : Center(
-                //                           child: IconButton(
-                //                               style: ButtonStyle(
-                //                                   backgroundColor:
-                //                                   MaterialStateProperty
-                //                                       .all(Warna
-                //                                       .ungu)),
-                //                               onPressed: () {
-                //                                 playAgain();
-                //                                 setState(() {
-                //
-                //                                 });
-                //                                 // setState(() {
-                //                                 //   isVideoComplete = false;
-                //                                 // });
-                //                               },
-                //                               icon: Icon(
-                //                                 Icons.play_arrow,
-                //                                 size: 100,
-                //                                 color: Colors.white,
-                //                               )),
-                //                         )
-                //                       ],
-                //                     ),
-                //                   );
-                //                 } else {
-                //                   return Center(
-                //                     child: CircularProgressIndicator(),
-                //                   );
-                //                 }
-                //               },
-                //             );
-                //           },
-                //         ),
-                //         shape: RoundedRectangleBorder(
-                //             borderRadius: BorderRadius.circular(5)),
-                //         actions: [
-                //           SizedBox(
-                //             width: double.infinity,
-                //             child: TextButton(
-                //                 style: ButtonStyle(
-                //                     backgroundColor:
-                //                         MaterialStateProperty.all(Colors.green),
-                //                     shape: MaterialStateProperty.all(
-                //                       RoundedRectangleBorder(
-                //                         borderRadius: BorderRadius.circular(4),
-                //                         side: BorderSide(
-                //                           color: Colors.black38,
-                //                         ),
-                //                       ),
-                //                     )),
-                //                 onPressed: () {
-                //                   Navigator.pop(context);
-                //                 },
-                //                 child: Icon(
-                //                   Icons.arrow_back,
-                //                   color: Colors.white,
-                //                 )),
-                //           ),
-                //         ],
-                //       );
-                //     });
               },
               icon: Icon(Icons.play_arrow),
             ),
@@ -200,14 +118,6 @@ class _LoginPageState extends State<LoginPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              // SizedBox(height: 100,),
-              // ClipRRect(
-              //     borderRadius: BorderRadius.circular(10),
-              //     child: Image.asset(
-              //       "assets/logo_mondu.png",
-              //       fit: BoxFit.cover,
-              //     )),
-              // SizedBox(height: 10,),
               ClipRRect(
                 // borderRadius: BorderRadius.circular(15),
                 child: BackdropFilter(
@@ -239,7 +149,6 @@ class _LoginPageState extends State<LoginPage> {
                                       width: 50,
                                       child: Image.asset(
                                         "assets/id-card.png",
-                                        // scale: 0.7,
                                       ),
                                     ),
                                     SizedBox(
@@ -364,18 +273,12 @@ class _LoginPageState extends State<LoginPage> {
                               gradient: LinearGradient(colors: [
                                 Warna.latar,
                                 Warna.primary,
-                                // Color.fromARGB(225, 0, 111, 186),
-                                // Color.fromARGB(225, 58, 171, 249)
                               ]),
                               borderRadius: BorderRadius.circular(20),
                             ),
                             child: ElevatedButton(
                                 style: ButtonStyle(
-
-                                    // padding: MaterialStateProperty.all(EdgeInsets.all(10)),
-                                    //   side: MaterialStateProperty.all(BorderSide(color: Warna.tersier)),
                                     backgroundColor: MaterialStateProperty.all(
-                                        // LinearGradient(colors: <Color>[Colors.green, Colors.black],)
                                         Colors.transparent),
                                     shadowColor: MaterialStateProperty.all(
                                         Colors.transparent)),

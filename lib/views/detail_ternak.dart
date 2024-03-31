@@ -5,9 +5,9 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:intl/intl.dart';
-import 'package:mondu_farm/booking.dart';
-import 'package:mondu_farm/detail_chat.dart';
-import 'package:mondu_farm/success.dart';
+import 'package:mondu_farm/logic/booking.dart';
+import 'package:mondu_farm/views/detail_chat.dart';
+import 'package:mondu_farm/views/success.dart';
 import 'package:mondu_farm/utils/alerts.dart';
 import 'package:mondu_farm/utils/color.dart';
 import 'package:mondu_farm/utils/custom_extension.dart';
@@ -82,12 +82,6 @@ class _DetailTernakState extends State<DetailTernak> {
     return await FirebaseDatabase.instance.ref(path).get();
   }
 
-  // List listImg = [];
-  //
-  // String? url1;
-  // String? url2;
-  // String? url3;
-
   Future<List<String>> getImageUrl() async {
     FirebaseStorage storage = FirebaseStorage.instance;
     Reference ref1 =
@@ -107,31 +101,10 @@ class _DetailTernakState extends State<DetailTernak> {
     return listUrl;
   }
 
-  // final List<String> imgList = [
-  //   'https://images.unsplash.com/photo-1520342868574-5fa3804e551c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=6ff92caffcdd63681a35134a6770ed3b&auto=format&fit=crop&w=1951&q=80',
-  //   'https://images.unsplash.com/photo-1522205408450-add114ad53fe?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=368f45b0888aeb0b7b08e3a1084d3ede&auto=format&fit=crop&w=1950&q=80',
-  //   'https://images.unsplash.com/photo-1519125323398-675f0ddb6308?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=94a1e718d89ca60a6337a6008341ca50&auto=format&fit=crop&w=1950&q=80',
-  // ];
-
   @override
   void initState() {
     super.initState();
     getPref();
-    // getImageUrl;
-    // FirebaseStorage storage = FirebaseStorage.instance;
-    // Reference ref1 = storage.ref().child("ternak").child(widget.kategori.toLowerCase()).child("gambar_1");
-    // Reference ref2 = storage.ref().child("ternak").child(widget.kategori.toLowerCase()).child("gambar_2");
-    // Reference ref3 = storage.ref().child("ternak").child(widget.kategori.toLowerCase()).child("gambar_3");
-    // url1 = ref1.getDownloadURL();
-    // url2 = ref2.getDownloadURL();
-    // url3 = ref3.getDownloadURL();
-    // listImg.add(
-    //   {
-    //     "gambar_1" : widget.url1,
-    //     "gambar_2" : widget.url2,
-    //     "gambar_3" : widget.url3,
-    //   }
-    // );
   }
 
   @override
@@ -147,21 +120,6 @@ class _DetailTernakState extends State<DetailTernak> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                // SizedBox(
-                //   height: 250,
-                //   width: double.infinity,
-                //   child: ClipRRect(
-                //     borderRadius: BorderRadius.circular(10),
-                //     child: Image.network(
-                //       widget.url1,
-                //       fit: BoxFit.fill,
-                //     ),
-                //   ),
-                // ),
-                // FutureBuilder(
-                //     future:,
-                //     builder: builder
-                // ),
                 FutureBuilder<List<String>>(
                     future: getImageUrl(),
                     builder: (context, snapshot) {
@@ -210,28 +168,6 @@ class _DetailTernakState extends State<DetailTernak> {
                               as Map<dynamic, dynamic>);
                       return Column(
                         children: [
-                          // Row(
-                          //   mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          //   children: [
-                          //     Expanded(
-                          //         child: DetailInfo(
-                          //             icon: "assets/icon_umur.png",
-                          //             value: data['usia'].toString(),
-                          //           height: 70,
-                          //         ),
-                          //     ),
-                          //     SizedBox(
-                          //       width: 10,
-                          //     ),
-                          //     Expanded(
-                          //       child: DetailInfo(
-                          //         icon: "assets/icon_bobot.png",
-                          //         value: "${data['berat'].toString()} Kg",
-                          //         height: 70,
-                          //       ),
-                          //     ),
-                          //   ],
-                          // ),
                           DetailInfo(
                             icon: "assets/trend.png",
                             value: "${data['usia'].toString()} Tahun",
@@ -373,14 +309,11 @@ class DetailInfo extends StatelessWidget {
             ClipOval(
                 child: Container(
                     width: 80.0,
-                    // Adjust the width and height as needed
                     height: 80.0,
                     padding: EdgeInsets.all(height! - 50),
                     color: Warna.secondary,
                     child: Image.asset(
                       icon,
-                      //     height: height,
-                      // width:height,
                     ))),
             SizedBox(
               width: 10,
@@ -393,13 +326,6 @@ class DetailInfo extends StatelessWidget {
                 decoration: InputDecoration(
                   filled: true,
                   fillColor: Warna.tersier,
-                  // hintText: "Mond**",
-                  // hintStyle: const TextStyle(
-                  //   color: Color(0xFF696F79),
-                  //   fontSize: 14,
-                  //   fontFamily: 'Poppins',
-                  //   fontWeight: FontWeight.w400,
-                  // ),
                   isDense: true,
                   contentPadding: const EdgeInsets.fromLTRB(15, 30, 15, 0),
                   border: OutlineInputBorder(
@@ -416,30 +342,5 @@ class DetailInfo extends StatelessWidget {
         )
       ],
     );
-    // Container(
-    //   // width: 150,
-    //   padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-    //   decoration: BoxDecoration(
-    //       color: Colors.purple,
-    //       borderRadius: BorderRadius.only(
-    //           topLeft: Radius.circular(50),
-    //           bottomLeft: Radius.circular(50),
-    //           topRight: Radius.circular(20),
-    //           bottomRight: Radius.circular(20))),
-    //   child: Row(
-    //     mainAxisAlignment: MainAxisAlignment.spaceAround,
-    //     children: [
-    //       Image.asset(icon, height: height),
-    //       Expanded(
-    //         child: FittedBox(
-    //           fit: BoxFit.scaleDown,
-    //           child: Text(
-    //             value,
-    //             style: TextStyle(fontSize: 30, color: Colors.white),
-    //           ),
-    //         ),
-    //       )
-    //     ],
-    //   ));
   }
 }
